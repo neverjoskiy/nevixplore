@@ -1,0 +1,176 @@
+/*
+ * Design tokens. Everything visual resolves to a variable in this file; no
+ * component hardcodes a colour, radius, or duration.
+ *
+ * Three layers:
+ *   1. palette  - raw ramps, never used directly by components
+ *   2. semantic - role names (surface, text, border) that themes remap
+ *   3. scale    - spacing, radius, type, motion
+ *
+ * Theming works by overriding only the semantic layer, so a theme can never
+ * leave a component with an unthemed colour.
+ */
+
+@layer tokens {
+  :root {
+    /* ---- palette: neutrals (cool grey, tuned to sit next to Windows 11) ---- */
+    --n-0: #ffffff;
+    --n-25: #fbfcfe;
+    --n-50: #f5f7fa;
+    --n-100: #eceff5;
+    --n-200: #dde2ec;
+    --n-300: #c6cedd;
+    --n-400: #9aa5b8;
+    --n-500: #6f7b90;
+    --n-600: #4d5769;
+    --n-700: #333c4b;
+    --n-800: #212934;
+    --n-850: #171d26;
+    --n-900: #10151c;
+    --n-950: #0a0e13;
+
+    /* ---- palette: accent (blue) and state colours ---- */
+    --b-300: #8ab4ff;
+    --b-400: #6fa0ff;
+    --b-500: #4c8dff;
+    --b-600: #2f6bd8;
+    --b-700: #234fa3;
+
+    --green-400: #57d9a3;
+    --green-600: #16a06b;
+    --amber-400: #f0b429;
+    --red-400: #ff7a7a;
+    --red-600: #d64550;
+
+    /* ---- scale ---- */
+    --space-1: 2px;
+    --space-2: 4px;
+    --space-3: 6px;
+    --space-4: 8px;
+    --space-5: 12px;
+    --space-6: 16px;
+    --space-7: 24px;
+    --space-8: 32px;
+
+    --radius-sm: 4px;
+    --radius-md: 7px;
+    --radius-lg: 11px;
+    --radius-pill: 999px;
+
+    --font-ui:
+      "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+    --font-mono: "Cascadia Mono", "Consolas", ui-monospace, "SF Mono", monospace;
+
+    --text-xs: 11px;
+    --text-sm: 12px;
+    --text-md: 13px;
+    --text-lg: 15px;
+
+    --row-comfortable: 30px;
+    --row-compact: 24px;
+
+    --dur-fast: 90ms;
+    --dur-base: 160ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+    --z-sticky: 10;
+    --z-overlay: 100;
+    --z-modal: 200;
+    --z-toast: 300;
+  }
+
+  /* ---- semantic: light ---- */
+  :root,
+  :root[data-theme="light"] {
+    color-scheme: light;
+
+    --accent: var(--b-600);
+    --accent-hover: var(--b-700);
+    --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+
+    --surface-app: var(--n-50);
+    --surface-chrome: var(--n-25);
+    --surface-list: var(--n-0);
+    --surface-raised: var(--n-0);
+    --surface-sunken: var(--n-100);
+
+    --text-primary: var(--n-900);
+    --text-secondary: var(--n-600);
+    --text-tertiary: var(--n-500);
+    --text-inverse: var(--n-0);
+    --text-on-accent: var(--n-0);
+
+    --border-subtle: var(--n-200);
+    --border-strong: var(--n-300);
+    --border-focus: var(--accent);
+
+    --state-hover: rgb(0 0 0 / 5%);
+    --state-selected: color-mix(in srgb, var(--accent) 16%, transparent);
+    --state-selected-inactive: var(--n-100);
+    --state-focus-ring: color-mix(in srgb, var(--accent) 45%, transparent);
+
+    --badge-bg: var(--n-100);
+    --badge-text: var(--n-700);
+
+    --shadow-raised: 0 1px 2px rgb(16 21 28 / 8%), 0 4px 12px rgb(16 21 28 / 6%);
+    --shadow-overlay: 0 8px 28px rgb(16 21 28 / 16%), 0 2px 6px rgb(16 21 28 / 8%);
+
+    --scrollbar-thumb: rgb(16 21 28 / 22%);
+    --scrollbar-thumb-hover: rgb(16 21 28 / 36%);
+  }
+
+  /* ---- semantic: dark ---- */
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --accent: var(--b-500);
+    --accent-hover: var(--b-400);
+    --accent-soft: color-mix(in srgb, var(--accent) 18%, transparent);
+
+    --surface-app: var(--n-950);
+    --surface-chrome: var(--n-900);
+    --surface-list: var(--n-900);
+    --surface-raised: var(--n-850);
+    --surface-sunken: var(--n-950);
+
+    --text-primary: var(--n-50);
+    --text-secondary: var(--n-300);
+    --text-tertiary: var(--n-400);
+    --text-inverse: var(--n-950);
+    --text-on-accent: var(--n-950);
+
+    --border-subtle: var(--n-800);
+    --border-strong: var(--n-700);
+    --border-focus: var(--accent);
+
+    --state-hover: rgb(255 255 255 / 6%);
+    --state-selected: color-mix(in srgb, var(--accent) 26%, transparent);
+    --state-selected-inactive: var(--n-800);
+    --state-focus-ring: color-mix(in srgb, var(--accent) 55%, transparent);
+
+    --badge-bg: var(--n-800);
+    --badge-text: var(--n-200);
+
+    --shadow-raised: 0 1px 2px rgb(0 0 0 / 40%), 0 4px 14px rgb(0 0 0 / 30%);
+    --shadow-overlay: 0 10px 32px rgb(0 0 0 / 55%), 0 2px 8px rgb(0 0 0 / 40%);
+
+    --scrollbar-thumb: rgb(255 255 255 / 20%);
+    --scrollbar-thumb-hover: rgb(255 255 255 / 32%);
+  }
+
+  /* Density is a token swap, not a component concern. */
+  :root[data-density="comfortable"] {
+    --row-height: var(--row-comfortable);
+  }
+
+  :root[data-density="compact"] {
+    --row-height: var(--row-compact);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --dur-fast: 0ms;
+      --dur-base: 0ms;
+    }
+  }
+}

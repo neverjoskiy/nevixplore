@@ -1,0 +1,55 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run tauri build -- --no-bundle
+      - name: Assemble portable zip
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path out | Out-Null
+          Compress-Archive -Path src-tauri/target/release/nevixplore.exe `
+            -DestinationPath "out/NevIxplore-${{ github.ref_name }}-portable.zip"
+      - name: Build installer
+        if: ${{ hashFiles('installer/nevixplore.iss') != '' }}
+        shell: pwsh
+        run: |
+          choco install innosetup --no-progress -y
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { throw "ISCC.exe not found at $iscc" }
+          & $iscc "installer\nevixplore.iss"
+          $setup = Get-ChildItem -Path out -Filter *.exe -ErrorAction SilentlyContinue |
+            Select-Object -First 1
+          if (-not $setup) { throw "installer .exe was not produced" }
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false

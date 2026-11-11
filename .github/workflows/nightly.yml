@@ -1,0 +1,58 @@
+name: nightly
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run tauri build -- --no-bundle
+      - name: Assemble portable zip
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path out | Out-Null
+          $stamp = Get-Date -Format "yyyyMMdd"
+          Compress-Archive -Path src-tauri/target/release/nevixplore.exe `
+            -DestinationPath "out/NevIxplore-nightly-$stamp-portable.zip"
+      - name: Publish nightly prerelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly
+          name: Nightly build
+          prerelease: true
+          body: Automated build from main. Not a stable release.
+          files: out/*
+      - name: Keep only the last 7 nightly builds
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $assets = @(gh release view nightly --json assets --jq '.assets[].name')
+          $stale = $assets | Sort-Object -Descending | Select-Object -Skip 7
+          foreach ($name in $stale) {
+            gh release delete-asset nightly $name --yes
+          }
+          Write-Host "kept $([Math]::Min($assets.Count, 7)) of $($assets.Count) assets"
