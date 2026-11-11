@@ -33,7 +33,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path out | Out-Null
-          Compress-Archive -Path src-tauri/target/release/nevixplore.exe `
+          Compress-Archive -Path target/release/nevixplore.exe `
             -DestinationPath "out/NevIxplore-${{ github.ref_name }}-portable.zip"
       - name: Build installer
         if: ${{ hashFiles('installer/nevixplore.iss') != '' }}

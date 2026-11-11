@@ -35,7 +35,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path out | Out-Null
           $stamp = Get-Date -Format "yyyyMMdd"
-          Compress-Archive -Path src-tauri/target/release/nevixplore.exe `
+          Compress-Archive -Path target/release/nevixplore.exe `
             -DestinationPath "out/NevIxplore-nightly-$stamp-portable.zip"
       - name: Publish nightly prerelease
         uses: softprops/action-gh-release@v2

@@ -76,4 +76,5 @@ If you happen to have a full toolchain, `cargo clippy --workspace --all-targets`
 - **`frontendDist` missing during `tauri build`** — `npm run build` must run first, which the
   workflows do. `beforeBuildCommand` handles it when you run the Tauri CLI directly.
 - **Bundle job cannot find the exe** — the binary is named after the crate (`nevixplore.exe`)
-  and lives in `src-tauri/target/release/`.
+  and lives in the workspace root `target/release/`, not `src-tauri/target/release/`, because
+  the root `Cargo.toml` makes the workspace own the target directory.

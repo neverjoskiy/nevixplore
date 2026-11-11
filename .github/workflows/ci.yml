@@ -59,6 +59,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: nevixplore-portable
-          path: src-tauri/target/release/nevixplore.exe
+          path: target/release/nevixplore.exe
           if-no-files-found: error
           retention-days: 14
