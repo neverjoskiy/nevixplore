@@ -15,17 +15,17 @@ launches, and no file contents are ever copied out of the directory you are brow
 NevIxplore is pre-alpha and has no supported release yet. Security fixes target `main` and,
 once they exist, the latest tagged release.
 
-| Version | Supported |
-|---|---|
-| `main` (unreleased) | Yes |
-| Tagged releases | None yet |
+| Version             | Supported |
+| ------------------- | --------- |
+| `main` (unreleased) | Yes       |
+| Tagged releases     | None yet  |
 
 ## Reporting a vulnerability
 
 **Do not open a public issue for a security problem.**
 
 Use GitHub's private vulnerability reporting on this repository
-(*Security* tab, then *Report a vulnerability*). If that is unavailable, contact the
+(_Security_ tab, then _Report a vulnerability_). If that is unavailable, contact the
 maintainer directly through their GitHub profile.
 
 Please include:

@@ -40,6 +40,7 @@ impl AppError {
         match source.kind() {
             std::io::ErrorKind::NotFound => Self::NotFound { path },
             std::io::ErrorKind::PermissionDenied => Self::Permission { path },
+            std::io::ErrorKind::NotADirectory => Self::NotADirectory { path },
             _ if is_path_too_long(&source) => Self::PathTooLong { path },
             _ => Self::Io { path, source },
         }

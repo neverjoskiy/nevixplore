@@ -13,11 +13,11 @@ clone; the benefit is that "works on my machine" is not a category of bug here.
 
 ## The three workflows
 
-| Workflow | Trigger | Produces |
-|---|---|---|
-| `ci.yml` | push to `main`, every PR | checks, plus a portable `.exe` artifact |
-| `release.yml` | push a `v*` tag | portable zip, and an installer once one exists |
-| `nightly.yml` | 03:00 UTC daily, or manual | the `nightly` prerelease, 7 builds retained |
+| Workflow      | Trigger                    | Produces                                       |
+| ------------- | -------------------------- | ---------------------------------------------- |
+| `ci.yml`      | push to `main`, every PR   | checks, plus a portable `.exe` artifact        |
+| `release.yml` | push a `v*` tag            | portable zip, and an installer once one exists |
+| `nightly.yml` | 03:00 UTC daily, or manual | the `nightly` prerelease, 7 builds retained    |
 
 ### `ci.yml`
 

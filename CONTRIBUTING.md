@@ -15,7 +15,7 @@ Actions. That is not a limitation to work around; it is the workflow.
 5. Fix what CI reports. Review starts once the `rust`, `frontend`, and `bundle` checks pass.
 6. Squash-merge. History on `main` is linear.
 
-If you *can* build locally, feel free — just make sure the branch is green in CI, because
+If you _can_ build locally, feel free — just make sure the branch is green in CI, because
 that is the only result the project trusts.
 
 ## Definition of done

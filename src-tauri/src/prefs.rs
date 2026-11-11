@@ -81,7 +81,7 @@ impl Default for Prefs {
             index_roots: Vec::new(),
             trash_policy: TrashPolicy::RecycleBin,
             max_content_search_bytes: 16 * 1024 * 1024,
-            terminal: Terminal::WindowsTerminal,
+            terminal: Terminal::Windows,
         }
     }
 }
@@ -160,7 +160,8 @@ pub enum TrashPolicy {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Terminal {
-    WindowsTerminal,
+    #[serde(rename = "windows-terminal")]
+    Windows,
     PowerShell,
     Cmd,
 }
@@ -215,10 +216,12 @@ mod tests {
     #[test]
     fn round_trips_through_disk() {
         let paths = temp_paths("roundtrip");
-        let mut prefs = Prefs::default();
-        prefs.theme = Theme::Dark;
-        prefs.show_preview = true;
-        prefs.index_roots = vec![r"C:\work".into()];
+        let prefs = Prefs {
+            theme: Theme::Dark,
+            show_preview: true,
+            index_roots: vec![r"C:\work".into()],
+            ..Prefs::default()
+        };
         prefs.save(&paths).expect("save");
 
         let loaded = Prefs::load(&paths);

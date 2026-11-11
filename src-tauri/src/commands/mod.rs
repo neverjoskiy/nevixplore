@@ -95,9 +95,7 @@ pub async fn pick_folder(
         let _ = tx.send(picked);
     });
 
-    let picked = rx
-        .await
-        .map_err(|_| AppError::Internal("folder picker was closed".into()))?;
+    let picked = rx.await.map_err(|_| AppError::Cancelled)?;
     Ok(picked.map(|path| path.to_string()))
 }
 

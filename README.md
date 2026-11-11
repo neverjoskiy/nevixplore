@@ -38,14 +38,14 @@ start.
 
 Work proceeds in reviewable PRs. Each PR is green in CI before the next begins.
 
-| Stage | Scope |
-|---|---|
-| PR-0 | Scaffold, CI, a window that opens |
-| PR-1 | Directory listing, virtualized file list, navigation |
-| PR-2 | Search, filtering, and sorting |
-| PR-3 | Preview pane |
-| PR-4 | File operations, with the Recycle Bin as the default |
-| Later | Tabs, indexing, plugins, benchmarking |
+| Stage | Scope                                                |
+| ----- | ---------------------------------------------------- |
+| PR-0  | Scaffold, CI, a window that opens                    |
+| PR-1  | Directory listing, virtualized file list, navigation |
+| PR-2  | Search, filtering, and sorting                       |
+| PR-3  | Preview pane                                         |
+| PR-4  | File operations, with the Recycle Bin as the default |
+| Later | Tabs, indexing, plugins, benchmarking                |
 
 ## Contributing
 
