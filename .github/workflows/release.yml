@@ -28,24 +28,19 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run tauri build -- --no-bundle
-      - name: Assemble portable zip
+      - run: npm run tauri build
+      - name: Assemble release assets
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path out | Out-Null
+          $tag = "${{ github.ref_name }}"
           Compress-Archive -Path target/release/nevixplore.exe `
-            -DestinationPath "out/NevIxplore-${{ github.ref_name }}-portable.zip"
-      - name: Build installer
-        if: ${{ hashFiles('installer/nevixplore.iss') != '' }}
-        shell: pwsh
-        run: |
-          choco install innosetup --no-progress -y
-          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
-          if (-not (Test-Path $iscc)) { throw "ISCC.exe not found at $iscc" }
-          & $iscc "installer\nevixplore.iss"
-          $setup = Get-ChildItem -Path out -Filter *.exe -ErrorAction SilentlyContinue |
+            -DestinationPath "out/NevIxplore-$tag-portable.zip"
+          $setup = Get-ChildItem -Path target/release/bundle/nsis -Filter *.exe -ErrorAction SilentlyContinue |
             Select-Object -First 1
-          if (-not $setup) { throw "installer .exe was not produced" }
+          if (-not $setup) { throw "NSIS installer was not produced under target/release/bundle/nsis" }
+          Copy-Item $setup.FullName "out/NevIxplore-$tag-setup.exe"
+          Get-ChildItem out | Select-Object Name, Length
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:

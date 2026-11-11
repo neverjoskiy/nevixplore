@@ -13,11 +13,11 @@ clone; the benefit is that "works on my machine" is not a category of bug here.
 
 ## The three workflows
 
-| Workflow      | Trigger                    | Produces                                       |
-| ------------- | -------------------------- | ---------------------------------------------- |
-| `ci.yml`      | push to `main`, every PR   | checks, plus a portable `.exe` artifact        |
-| `release.yml` | push a `v*` tag            | portable zip, and an installer once one exists |
-| `nightly.yml` | 03:00 UTC daily, or manual | the `nightly` prerelease, 7 builds retained    |
+| Workflow      | Trigger                    | Produces                                    |
+| ------------- | -------------------------- | ------------------------------------------- |
+| `ci.yml`      | push to `main`, every PR   | checks, plus a portable `.exe` artifact     |
+| `release.yml` | push a `v*` tag            | portable zip and an NSIS installer          |
+| `nightly.yml` | 03:00 UTC daily, or manual | the `nightly` prerelease, 7 builds retained |
 
 ### `ci.yml`
 
@@ -40,9 +40,15 @@ git tag v0.0.1
 git push origin v0.0.1
 ```
 
-CI builds the app, zips `nevixplore.exe`, builds an Inno Setup installer **if**
-`installer/nevixplore.iss` exists, and publishes both to a GitHub Release with generated
-notes. Until that installer script lands, a release contains only the portable zip.
+CI runs a full `tauri build`, which produces the app and an NSIS installer from the
+`bundle` section of `src-tauri/tauri.conf.json`. It publishes two assets to a GitHub Release
+with generated notes: `NevIxplore-<tag>-portable.zip` (the bare `.exe`) and
+`NevIxplore-<tag>-setup.exe` (the installer). The step fails loudly if the installer is
+missing, so a release cannot silently ship the zip alone.
+
+The spec calls for Inno Setup in this workflow. PR-0 uses the NSIS target instead because
+Tauri already configures it and it needs no `.iss` script to exist; packaging is revisited in
+PR-14, where the installer gets real attention.
 
 ### `nightly.yml`
 
